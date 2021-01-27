@@ -105,7 +105,7 @@ In mh_distance(x = Inf, y = -Inf) : x or y cannot be NA, NaN, Inf, or -Inf
 - You may only use functions and operators available in `base` R.
 
 - You do not need to handle special characters in strings
-	(words such as `"can't"` or `"why?"`) or situations where a user may pass in 
+	(words such as `"can't"` or `"why?"`) or situations where a user may pass in
 	`NULL`. There won't be any test cases involving these.
 
 - Please use code comments as you see fit. However, you do not need to document
@@ -173,7 +173,7 @@ be in this file.
 
 ### Deadline and submission
 
-**The deadline to submit Homework 01 is Wednesday, February 2 at 11:59pm EST.**
+**The deadline to submit Homework 01 is Wednesday, February 3 at 11:59pm ET.**
 Only your final commit and code in the main branch will be graded.
 Do not forget to push your work to your assigned repository on GitHub before
 the deadline.
