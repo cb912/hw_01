@@ -1,4 +1,4 @@
-# STA 523 :: Homework 01
+# STA 323 & 523 :: Homework 01
 
 ## Introduction
 
