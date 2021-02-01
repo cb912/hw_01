@@ -1,7 +1,7 @@
 ---
 title: "Homework 1"
-author: ""
-date: ""
+author: "Charlie Bonetti"
+date: "2/1/21"
 output: html_document
 ---
 
@@ -12,11 +12,32 @@ knitr::opts_chunk$set(echo = TRUE, comment = NA)
 ## Task 1
 
 ```{r mh_distance_function}
-mh_distance <- function() {
+mh_distance <- function(x,y) {
   
-  # body of your function goes here...
+  if((typeof(x) != typeof(y)) || (is.numeric(x) == FALSE) || (is.logical(x) == FALSE) || (is.character(x) == FALSE))  {
+    print("-1")
+    warning("x and y are not both logical, numeric, or character")
+  }
   
+  if(is.infinite(x) || is.nan(x) || is.na(x) || is.infinite(y) || is.nan(y) || is.na(y)) {
+    print("-1")
+    warning("x or y cannot be NA, NaN, Inf or -Inf")
+  }
+  
+  if(typeof(x) == "logical") {
+    if(x == y) {print("0")}
+    else(print("1"))
+  }
+  
+  if(typeof(x) == "character") {
+    if(nchar(x) != nchar(y)) {
+      print("-1")
+      warning("x and y are not same number of characters")
+    }
+    w <- strsplit(x)
+  }
 }
+
 ```
 
 
