@@ -15,17 +15,17 @@ knitr::opts_chunk$set(echo = TRUE, comment = NA)
 mh_distance <- function(x,y)
   if((is.logical(x) == TRUE) && (is.logical(y) == TRUE)) {
     if((is.na(x) == TRUE) || (is.na(y) == TRUE)) {
-      print(-1)
       warning("x or y cannot be NA, NaN, Inf or -Inf")
+      return(-1)
     }else if(x != y) {
-      print(1)
+      return(1)
     }else {
-      print(0)
+      return(0)
     }
   }else if((is.character(x) == TRUE) && (is.character(y) == TRUE)) {
     if(nchar(x) != nchar(y)) {
-      print(-1)
       warning("x and y do not have the same number of digits or letters")
+      return(-1)
     }else {
       total <- 0
       xsplit <- strsplit(x,"")[[1]]
@@ -35,18 +35,18 @@ mh_distance <- function(x,y)
             total <- total + 1
           }
       }
-      print(total)
+      return(total)
     }
   }else if ((is.numeric(x) == TRUE) && (is.numeric(y) == TRUE)) {
     if(is.infinite(x) || is.nan(x) || is.na(x) || is.infinite(y) || is.nan(y) || is.na(y)) {
-      print(-1)
       warning("x or y cannot be NA, NaN, Inf or -Inf")
-    }else if(nchar(as.character(x)) != nchar(as.character(y))) {
-      print(-1)
-      warning("x and y do not have the same number of digits or letters")
-    }else if((is.integer(x) == FALSE) || (is.integer(y) == FALSE)) {
-      print(-1)
+      return(-1)
+    }else if((x %% 1 != 0) || (y %% 1 != 0)) {
       warning("x or y cannot contain decimal values")
+      return(-1)
+    }else if(nchar(as.character(x)) != nchar(as.character(y))) {
+      warning("x and y do not have the same number of digits or letters")
+      return(-1)
     }
     else {
       total <- 0
@@ -57,26 +57,21 @@ mh_distance <- function(x,y)
             total <- total + 1
           }
       }
-      print(total)
+      return(total)
     }
   }else {
-    print(-1)
     warning("x and y are not both logical, numeric, or character")
+    return(-1)
 }
 ```
 
 
 ## Task 2
 
-<i>
-Be sure to remove chunk option `eval=FALSE` in the below code chunks
-once you create `mh_distance()`. Do not include this italicized
-text in your final submission.
-</i>
 
 **Initial test cases** (return a non-negative modified Hamming distance)
 
-```{r eval=FALSE}
+```{r initial non-negative test cases}
 mh_distance(x = "abc", y = "abc")
 mh_distance(x = T, y = FALSE)
 mh_distance(x = "523890", y = "752839")
@@ -85,7 +80,7 @@ mh_distance(x = 2341, y = 2350)
 
 Added test cases that return a non-negative modified Hamming distance result.
 
-```{r}
+```{r added non-negative test cases}
 mh_distance(x = 1245, y= 4873)
 mh_distance(x = "cat", y = "sat")
 mh_distance(x = F, y = FALSE)
@@ -94,7 +89,7 @@ mh_distance(x = "jars", y = "cars")
 
 **Initial test cases** (return values of `-1`)
 
-```{r eval=FALSE}
+```{r initial test cases returning -1}
 mh_distance(x = 52, y = 113)
 mh_distance(x = "swimming", y = "winning")
 mh_distance(x = NA, y = TRUE)
@@ -103,7 +98,7 @@ mh_distance(x = 1.5, y = 2.5)
 
 Added test cases that return a value of `-1`.
 
-```{r}
+```{r added test cases returning -1}
 mh_distance(x = "car", y = 142)
 mh_distance(x = 124, y = 5321)
 mh_distance(x = TRUE, y = "star")
@@ -115,16 +110,26 @@ mh_distance(x = "apple", y = "map")
 
 Consider the pair of vectors `s` and `w` given below.
 
-```{r}
+```{r sample vector pair}
 s <- c(26, 50123, 456.12, 8, 0)
 w <- c(22, 50000, 451.00, 88, 0)
 ```
 
-```{r}
-
+```{r vectorizing mh_distance}
+for(i in 1:length(s)) {
+  ham <- mh_distance(s[i],w[i])
+  text <- paste0("The modified Hamming Distance between ", s[i], " and ", w[i], " is ", ham)
+  print(text)
+}
 ```
 
 
 ## Task 4
 
-Brief write-up goes here...
+I mainly handled impossible invalid test cases through if statements. For example, for inputs that were both type numeric but different amount of digits, I first included an if statement to check if both inputs were numbers and nested within that if statement was another if statement testing whether the number of digits were the same using using the nchar() function. If they were not the same, I included a warning function with a customized message and then returned -1.
+
+Another example is the case of checking whether both inputs were numbers with at least one having a decimal. For this case, I first used an if statement to check whether both were numeric inputs using the is.numeric() function. I then checked if either of them or both had decimals by checking if they had a non-zero remainder when divided by 1 by using %% function. If this condition was satisfied, I put in a customized warning message along with returning -1.
+
+I chose to do a bunch of nested conditionals because that was the easiest method to approaching this problem. Since the task outlined plenty of specific invalid cases with a specific output, I figured that if statements would be the best way to account for the invalid inputs. For finding the hamming distance for numerics and characters, I used a for loop that ran through the loop as many times as the character length of the input (using str.split()), and if at the same index the values didn't equal each other I added 1 to the total number for hamming distance.
+
+One of the main weaknesses in my code is that I use a lot of nested if statements. This can be problematic in terms of readability because it is hard to keep track of what if statement is responsible for what in the context of the entire code. Another weakness of the code it is not not that specific for warnings in certain invalid cases. For example, if the input was x = TRUE and y = 355, the warning would only say that "x and y are not both logical, numeric, or character". It would not indicate which specific types were inputted in the function.
