@@ -1,7 +1,7 @@
 ---
 title: "Homework 1"
 author: "Charlie Bonetti"
-date: "2/1/21"
+date: "2/3/21"
 output: html_document
 ---
 
@@ -12,32 +12,57 @@ knitr::opts_chunk$set(echo = TRUE, comment = NA)
 ## Task 1
 
 ```{r mh_distance_function}
-mh_distance <- function(x,y) {
-  
-  if((typeof(x) != typeof(y)) || (is.numeric(x) == FALSE) || (is.logical(x) == FALSE) || (is.character(x) == FALSE))  {
-    print("-1")
-    warning("x and y are not both logical, numeric, or character")
-  }
-  
-  if(is.infinite(x) || is.nan(x) || is.na(x) || is.infinite(y) || is.nan(y) || is.na(y)) {
-    print("-1")
-    warning("x or y cannot be NA, NaN, Inf or -Inf")
-  }
-  
-  if(typeof(x) == "logical") {
-    if(x == y) {print("0")}
-    else(print("1"))
-  }
-  
-  if(typeof(x) == "character") {
-    if(nchar(x) != nchar(y)) {
-      print("-1")
-      warning("x and y are not same number of characters")
+mh_distance <- function(x,y)
+  if((is.logical(x) == TRUE) && (is.logical(y) == TRUE)) {
+    if((is.na(x) == TRUE) || (is.na(y) == TRUE)) {
+      print(-1)
+      warning("x or y cannot be NA, NaN, Inf or -Inf")
+    }else if(x != y) {
+      print(1)
+    }else {
+      print(0)
     }
-    w <- strsplit(x)
-  }
+  }else if((is.character(x) == TRUE) && (is.character(y) == TRUE)) {
+    if(nchar(x) != nchar(y)) {
+      print(-1)
+      warning("x and y do not have the same number of digits or letters")
+    }else {
+      total <- 0
+      xsplit <- strsplit(x,"")[[1]]
+      ysplit <- strsplit(y,"")[[1]]
+      for(i in 1:length(ysplit)) {
+          if(xsplit[i] != ysplit[i]) {
+            total <- total + 1
+          }
+      }
+      print(total)
+    }
+  }else if ((is.numeric(x) == TRUE) && (is.numeric(y) == TRUE)) {
+    if(is.infinite(x) || is.nan(x) || is.na(x) || is.infinite(y) || is.nan(y) || is.na(y)) {
+      print(-1)
+      warning("x or y cannot be NA, NaN, Inf or -Inf")
+    }else if(nchar(as.character(x)) != nchar(as.character(y))) {
+      print(-1)
+      warning("x and y do not have the same number of digits or letters")
+    }else if((is.integer(x) == FALSE) || (is.integer(y) == FALSE)) {
+      print(-1)
+      warning("x or y cannot contain decimal values")
+    }
+    else {
+      total <- 0
+      xsplit <- strsplit(as.character(x),"")[[1]]
+      ysplit <- strsplit(as.character(y),"")[[1]]
+      for(i in 1:length(ysplit)) {
+          if(xsplit[i] != ysplit[i]) {
+            total <- total + 1
+          }
+      }
+      print(total)
+    }
+  }else {
+    print(-1)
+    warning("x and y are not both logical, numeric, or character")
 }
-
 ```
 
 
@@ -61,7 +86,10 @@ mh_distance(x = 2341, y = 2350)
 Added test cases that return a non-negative modified Hamming distance result.
 
 ```{r}
-# additional test cases go here
+mh_distance(x = 1245, y= 4873)
+mh_distance(x = "cat", y = "sat")
+mh_distance(x = F, y = FALSE)
+mh_distance(x = "jars", y = "cars")
 ```
 
 **Initial test cases** (return values of `-1`)
@@ -76,7 +104,10 @@ mh_distance(x = 1.5, y = 2.5)
 Added test cases that return a value of `-1`.
 
 ```{r}
-# additional test cases go here
+mh_distance(x = "car", y = 142)
+mh_distance(x = 124, y = 5321)
+mh_distance(x = TRUE, y = "star")
+mh_distance(x = "apple", y = "map")
 ```
 
 
@@ -90,7 +121,7 @@ w <- c(22, 50000, 451.00, 88, 0)
 ```
 
 ```{r}
-# loop goes here
+
 ```
 
 

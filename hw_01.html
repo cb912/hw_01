@@ -374,37 +374,63 @@ summary {
 
 <h1 class="title toc-ignore">Homework 1</h1>
 <h4 class="author">Charlie Bonetti</h4>
-<h4 class="date">2/1/21</h4>
+<h4 class="date">2/3/21</h4>
 
 </div>
 
 
 <div id="task-1" class="section level2">
 <h2>Task 1</h2>
-<pre class="r"><code>mh_distance &lt;- function(x,y) {
-  
-  if((typeof(x) != typeof(y)) || (is.numeric(x) == FALSE) || (is.logical(x) == FALSE) || (is.character(x) == FALSE))  {
-    print(&quot;-1&quot;)
-    warning(&quot;x and y are not both logical, numeric, or character&quot;)
-  }
-  
-  if(is.infinite(x) || is.nan(x) || is.na(x) || is.infinite(y) || is.nan(y) || is.na(y)) {
-    print(&quot;-1&quot;)
-    warning(&quot;x or y cannot be NA, NaN, Inf or -Inf&quot;)
-  }
-  
-  if(typeof(x) == &quot;logical&quot;) {
-    if(x == y) {print(&quot;0&quot;)}
-    else(print(&quot;1&quot;))
-  }
-  
-  if(typeof(x) == &quot;character&quot;) {
-    if(nchar(x) != nchar(y)) {
-      print(&quot;-1&quot;)
-      warning(&quot;x and y are not same number of characters&quot;)
+<pre class="r"><code>mh_distance &lt;- function(x,y)
+  if((is.logical(x) == TRUE) &amp;&amp; (is.logical(y) == TRUE)) {
+    if((is.na(x) == TRUE) || (is.na(y) == TRUE)) {
+      print(-1)
+      warning(&quot;x or y cannot be NA, NaN, Inf or -Inf&quot;)
+    }else if(x != y) {
+      print(1)
+    }else {
+      print(0)
     }
-    w &lt;- strsplit(x)
-  }
+  }else if((is.character(x) == TRUE) &amp;&amp; (is.character(y) == TRUE)) {
+    if(nchar(x) != nchar(y)) {
+      print(-1)
+      warning(&quot;x and y do not have the same number of digits or letters&quot;)
+    }else {
+      total &lt;- 0
+      xsplit &lt;- strsplit(x,&quot;&quot;)[[1]]
+      ysplit &lt;- strsplit(y,&quot;&quot;)[[1]]
+      for(i in 1:length(ysplit)) {
+          if(xsplit[i] != ysplit[i]) {
+            total &lt;- total + 1
+          }
+      }
+      print(total)
+    }
+  }else if ((is.numeric(x) == TRUE) &amp;&amp; (is.numeric(y) == TRUE)) {
+    if(is.infinite(x) || is.nan(x) || is.na(x) || is.infinite(y) || is.nan(y) || is.na(y)) {
+      print(-1)
+      warning(&quot;x or y cannot be NA, NaN, Inf or -Inf&quot;)
+    }else if(nchar(as.character(x)) != nchar(as.character(y))) {
+      print(-1)
+      warning(&quot;x and y do not have the same number of digits or letters&quot;)
+    }else if((is.integer(x) == FALSE) || (is.integer(y) == FALSE)) {
+      print(-1)
+      warning(&quot;x or y cannot contain decimal values&quot;)
+    }
+    else {
+      total &lt;- 0
+      xsplit &lt;- strsplit(as.character(x),&quot;&quot;)[[1]]
+      ysplit &lt;- strsplit(as.character(y),&quot;&quot;)[[1]]
+      for(i in 1:length(ysplit)) {
+          if(xsplit[i] != ysplit[i]) {
+            total &lt;- total + 1
+          }
+      }
+      print(total)
+    }
+  }else {
+    print(-1)
+    warning(&quot;x and y are not both logical, numeric, or character&quot;)
 }</code></pre>
 </div>
 <div id="task-2" class="section level2">
@@ -416,21 +442,43 @@ mh_distance(x = T, y = FALSE)
 mh_distance(x = &quot;523890&quot;, y = &quot;752839&quot;)
 mh_distance(x = 2341, y = 2350)</code></pre>
 <p>Added test cases that return a non-negative modified Hamming distance result.</p>
-<pre class="r"><code># additional test cases go here</code></pre>
+<pre class="r"><code>mh_distance(x = 1245, y= 4873)</code></pre>
+<pre><code>[1] -1</code></pre>
+<pre><code>Warning in mh_distance(x = 1245, y = 4873): x or y cannot contain decimal values</code></pre>
+<pre class="r"><code>mh_distance(x = &quot;cat&quot;, y = &quot;sat&quot;)</code></pre>
+<pre><code>[1] 1</code></pre>
+<pre class="r"><code>mh_distance(x = F, y = FALSE)</code></pre>
+<pre><code>[1] 0</code></pre>
+<pre class="r"><code>mh_distance(x = &quot;jars&quot;, y = &quot;cars&quot;)</code></pre>
+<pre><code>[1] 1</code></pre>
 <p><strong>Initial test cases</strong> (return values of <code>-1</code>)</p>
 <pre class="r"><code>mh_distance(x = 52, y = 113)
 mh_distance(x = &quot;swimming&quot;, y = &quot;winning&quot;)
 mh_distance(x = NA, y = TRUE)
 mh_distance(x = 1.5, y = 2.5)</code></pre>
 <p>Added test cases that return a value of <code>-1</code>.</p>
-<pre class="r"><code># additional test cases go here</code></pre>
+<pre class="r"><code>mh_distance(x = &quot;car&quot;, y = 142)</code></pre>
+<pre><code>[1] -1</code></pre>
+<pre><code>Warning in mh_distance(x = &quot;car&quot;, y = 142): x and y are not both logical,
+numeric, or character</code></pre>
+<pre class="r"><code>mh_distance(x = 124, y = 5321)</code></pre>
+<pre><code>[1] -1</code></pre>
+<pre><code>Warning in mh_distance(x = 124, y = 5321): x and y do not have the same number
+of digits or letters</code></pre>
+<pre class="r"><code>mh_distance(x = TRUE, y = &quot;star&quot;)</code></pre>
+<pre><code>[1] -1</code></pre>
+<pre><code>Warning in mh_distance(x = TRUE, y = &quot;star&quot;): x and y are not both logical,
+numeric, or character</code></pre>
+<pre class="r"><code>mh_distance(x = &quot;apple&quot;, y = &quot;map&quot;)</code></pre>
+<pre><code>[1] -1</code></pre>
+<pre><code>Warning in mh_distance(x = &quot;apple&quot;, y = &quot;map&quot;): x and y do not have the same
+number of digits or letters</code></pre>
 </div>
 <div id="task-3" class="section level2">
 <h2>Task 3</h2>
 <p>Consider the pair of vectors <code>s</code> and <code>w</code> given below.</p>
 <pre class="r"><code>s &lt;- c(26, 50123, 456.12, 8, 0)
 w &lt;- c(22, 50000, 451.00, 88, 0)</code></pre>
-<pre class="r"><code># loop goes here</code></pre>
 </div>
 <div id="task-4" class="section level2">
 <h2>Task 4</h2>
